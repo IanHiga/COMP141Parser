@@ -1,4 +1,9 @@
 
+/*
+ * COMP 141- Programming Languages
+ * Name: Ian Higa
+ * Project Phase: 2.1
+ */
 public class Tree {
 	private Token value;
 	private Tree left;

@@ -2,6 +2,11 @@ import java.util.LinkedList;
 
 import jdk.nashorn.internal.runtime.ParserException;
 
+/*
+ * COMP 141- Programming Languages
+ * Name: Ian Higa
+ * Project Phase: 2.1
+ */
 public class Parser {
 	private LinkedList<Token> tokens;
 	private Token next;
