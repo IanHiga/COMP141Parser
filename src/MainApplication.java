@@ -34,6 +34,7 @@ public class MainApplication {
 		if(in.exists()){		
 			//PROCEED WITH SCAN
 			Scanner scan;
+			String nextLine = null; 
 			try {
 				scan = new Scanner(in);
 			} catch (FileNotFoundException e) {
@@ -61,7 +62,9 @@ public class MainApplication {
 
 			do {
 				try {
-					tokenOut.write(scanInputLine(scan.nextLine()));
+					nextLine = scanInputLine(scan.nextLine());
+					nextLine = parseExpression(nextLine);
+					tokenOut.write(nextLine);
 				} catch (IOException e) {
 					e.printStackTrace();
 					scan.close();
@@ -83,13 +86,35 @@ public class MainApplication {
 		}
 	}
 	
+	private static String parseExpression(String tokens) {
+		String output = tokens;
+		Scanner lineScanner = new Scanner(tokens);
+		
+		//Skip the "Line: <Expression>" and whitespace line from previous formatting
+		lineScanner.nextLine();
+		lineScanner.nextLine();
+		
+		//Identify all tokens and place into list
+		while(lineScanner.hasNext() == true) {
+			String curToken = lineScanner.nextLine();
+			String test = "";
+			Scanner tokenScanner = new Scanner(curToken);
+			test = tokenScanner.next();
+			tokenScanner.next();
+			System.out.println("\n" + tokenScanner.next() + " Value: " + test);
+		}
+		
+		output += "\nAST:\n";
+		return output; //TODO Delete
+	}
+	
 	private static String scanInputLine(String in) {
 		in += " ";
 		char[] tokenChars = in.toCharArray();
 		String tokenType = "";
 		String temp = "";
 		String next = "";
-		String tokens = "Line: " + in + "\n";
+		String tokens = "Line: " + in + "\nTokens:\n";
 		
 		for(int i = 0; i < in.length(); i++) {
 			next = "";
@@ -98,7 +123,7 @@ public class MainApplication {
 			
 			if(Pattern.matches("[0-9]+", temp)) {
 				if(!Pattern.matches("[0-9]", next)) {
-					tokenType = "DIGIT";
+					tokenType = "NUMBER";
 				}
 			}
 			else if(Pattern.matches("[+|\\-|*|/|(|)|;]", temp) || Pattern.matches("[:]|[:][=]", temp)) {
@@ -107,11 +132,7 @@ public class MainApplication {
 				}
 			}
 			else if(Pattern.matches("[[a-z]|[A-Z]][[a-z]|[A-Z]|[0-9]]*", temp)) {
-				if(temp.contentEquals("if") || temp.contentEquals("then") || temp.contentEquals("elseif") || temp.contentEquals("while")
-						|| temp.contentEquals("do") || temp.contentEquals("endwhile") || temp.contentEquals("skip")) {
-					tokenType = "KEYWORD";
-				}
-				else if(!(Pattern.matches("[a-z]|[A-Z]|[0-9]", next))) {					
+				if(!(Pattern.matches("[a-z]|[A-Z]|[0-9]", next))) {					
 					tokenType = "IDENTIFIER";
 				}
 			}
