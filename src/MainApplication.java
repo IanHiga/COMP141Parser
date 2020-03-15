@@ -13,10 +13,8 @@ import java.util.regex.Pattern;
 
 public class MainApplication {
 	public static final String DIRECTORY = "files/";
-	public static final String FILE_EXTENSION = ".txt";
 	
 	public static void main(String[] args) {
-		Scanner scan = new Scanner(System.in);
 		String in = args[0];
 		String out = args[1];
 		
@@ -24,8 +22,8 @@ public class MainApplication {
 			System.out.println("An error has occured:\nNot enough arguments.\n");
 		}
 		else {
-			File input = new File(DIRECTORY + in + FILE_EXTENSION);
-			File output = new File(DIRECTORY + out + FILE_EXTENSION);
+			File input = new File("../" + DIRECTORY + in);
+			File output = new File("../" + DIRECTORY + out);
 			readFile(input, output);
 		}
 	}
