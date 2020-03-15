@@ -75,10 +75,8 @@ public class Parser {
 	
 	private Tree parseElement() {
 		Tree node;
-		System.out.println("NEXT TOKEN IS " + next.getValue() + " \n");
 		if(next.getValue().contentEquals("(")) {
 			nextToken();
-			System.out.println("ENTERED EXPRESSION. \n");
 			node = parseExpression();
 			if(next.getValue().contentEquals(")")) {
 				nextToken();

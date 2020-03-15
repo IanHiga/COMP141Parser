@@ -111,7 +111,6 @@ public class MainApplication {
 		output += "\nAST:\n";
 		Parser parse = new Parser();
 		output += parse.parseList(tokens);
-		System.out.println(output);
 		return output;
 	}
 	
