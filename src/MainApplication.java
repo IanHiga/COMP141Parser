@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -63,7 +64,7 @@ public class MainApplication {
 			do {
 				try {
 					nextLine = scanInputLine(scan.nextLine());
-					nextLine = parseExpression(nextLine);
+					nextLine = parseLine(nextLine);
 					tokenOut.write(nextLine);
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -86,9 +87,10 @@ public class MainApplication {
 		}
 	}
 	
-	private static String parseExpression(String tokens) {
-		String output = tokens;
-		Scanner lineScanner = new Scanner(tokens);
+	private static String parseLine(String in) {
+		String output = in;
+		Scanner lineScanner = new Scanner(in);
+		ArrayList<Token> tokens = new ArrayList<Token>();
 		
 		//Skip the "Line: <Expression>" and whitespace line from previous formatting
 		lineScanner.nextLine();
@@ -97,15 +99,23 @@ public class MainApplication {
 		//Identify all tokens and place into list
 		while(lineScanner.hasNext() == true) {
 			String curToken = lineScanner.nextLine();
-			String test = "";
+			String val = "", type = "";
 			Scanner tokenScanner = new Scanner(curToken);
-			test = tokenScanner.next();
+			val = tokenScanner.next();
 			tokenScanner.next();
-			System.out.println("\n" + tokenScanner.next() + " Value: " + test);
+			type = tokenScanner.next();
+			Token nextToken = new Token(type, val);
+			tokens.add(nextToken);
 		}
-		
 		output += "\nAST:\n";
-		return output; //TODO Delete
+		output += parseExpression(tokens);
+		System.out.println(output);
+		return output;
+	}
+	
+	private static String parseExpression(ArrayList<Token> tokens) {
+		String out = "";
+		return out;
 	}
 	
 	private static String scanInputLine(String in) {
