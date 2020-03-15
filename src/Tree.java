@@ -18,7 +18,7 @@ public class Tree {
 		return right;
 	}
 	
-	public Tree getValue() {
+	public Token getValue() {
 		return value;
 	}
 }
