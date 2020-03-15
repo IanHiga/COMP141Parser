@@ -21,4 +21,20 @@ public class Tree {
 	public Token getValue() {
 		return value;
 	}
+	
+	public String toString() {
+		String out = "";
+		//Print this node
+		out += value.toString();
+		//Left Children
+		if(left != null) {
+			out += left.toString();
+		}
+		//Right Children
+		if(right != null) {
+			out += right.toString();
+		}
+		
+		return out;
+	}
 }

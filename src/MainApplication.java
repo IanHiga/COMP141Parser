@@ -3,6 +3,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -90,7 +91,7 @@ public class MainApplication {
 	private static String parseLine(String in) {
 		String output = in;
 		Scanner lineScanner = new Scanner(in);
-		ArrayList<Token> tokens = new ArrayList<Token>();
+		LinkedList<Token> tokens = new LinkedList<Token>();
 		
 		//Skip the "Line: <Expression>" and whitespace line from previous formatting
 		lineScanner.nextLine();
@@ -108,14 +109,10 @@ public class MainApplication {
 			tokens.add(nextToken);
 		}
 		output += "\nAST:\n";
-		output += parseExpression(tokens);
+		Parser parse = new Parser();
+		output += parse.parseList(tokens);
 		System.out.println(output);
 		return output;
-	}
-	
-	private static String parseExpression(ArrayList<Token> tokens) {
-		String out = "";
-		return out;
 	}
 	
 	private static String scanInputLine(String in) {

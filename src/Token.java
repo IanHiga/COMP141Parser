@@ -16,4 +16,7 @@ public class Token {
 		return value;
 	}
 	
+	public String toString() {
+		return(type + " : " + value + "\n");
+	}
 }
