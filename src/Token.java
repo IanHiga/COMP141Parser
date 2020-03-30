@@ -2,7 +2,7 @@
 /*
  * COMP 141- Programming Languages
  * Name: Ian Higa
- * Project Phase: 2.1
+ * Project Phase: 2.2
  */
 public class Token {
 	private String value;

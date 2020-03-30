@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 /*
  * COMP 141- Programming Languages
  * Name: Ian Higa
- * Project Phase: 2.1
+ * Project Phase: 2.2
  */
 
 public class MainApplication {
@@ -36,7 +36,8 @@ public class MainApplication {
 		if(in.exists()){		
 			//PROCEED WITH SCAN
 			Scanner scan;
-			String nextLine = null; 
+			String nextLine = "";
+			String nextLineTokens = "Tokens:\n";
 			try {
 				scan = new Scanner(in);
 			} catch (FileNotFoundException e) {
@@ -63,16 +64,15 @@ public class MainApplication {
 			}
 
 			do {
-				try {
-					nextLine = scanInputLine(scan.nextLine());
-					nextLine = parseLine(nextLine);
-					tokenOut.write(nextLine);
-				} catch (IOException e) {
-					e.printStackTrace();
-					scan.close();
-					break;
-				}
+				nextLineTokens += scanInputLine(scan.nextLine());
 			} while(scan.hasNext());
+			nextLine += parseLine(nextLineTokens);
+			try {
+				tokenOut.write(nextLine);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			try {
 				tokenOut.close();
 			} catch (IOException e) {
@@ -92,9 +92,7 @@ public class MainApplication {
 		String output = in;
 		Scanner lineScanner = new Scanner(in);
 		LinkedList<Token> tokens = new LinkedList<Token>();
-		
-		//Skip the "Line: <Expression>" and whitespace line from previous formatting
-		lineScanner.nextLine();
+		//Skip Label and newline
 		lineScanner.nextLine();
 		
 		//Identify all tokens and place into list
@@ -102,11 +100,18 @@ public class MainApplication {
 			String curToken = lineScanner.nextLine();
 			String val = "", type = "";
 			Scanner tokenScanner = new Scanner(curToken);
-			val = tokenScanner.next();
-			tokenScanner.next();
-			type = tokenScanner.next();
-			Token nextToken = new Token(type, val);
-			tokens.add(nextToken);
+			if(tokenScanner.hasNext()) {				
+				val = tokenScanner.next();
+				tokenScanner.next();
+				type = tokenScanner.next();
+				Token nextToken = new Token(type, val);
+				tokens.add(nextToken);
+			}
+			else {
+				tokenScanner.close();
+				break;
+			}
+			tokenScanner.close();
 		}
 		output += "\nAST:\n";
 		Parser parse = new Parser();
@@ -120,7 +125,7 @@ public class MainApplication {
 		String tokenType = "";
 		String temp = "";
 		String next = "";
-		String tokens = "Line: " + in + "\nTokens:\n";
+		String tokens = "";
 		
 		for(int i = 0; i < in.length(); i++) {
 			next = "";
@@ -138,7 +143,11 @@ public class MainApplication {
 				}
 			}
 			else if(Pattern.matches("[[a-z]|[A-Z]][[a-z]|[A-Z]|[0-9]]*", temp)) {
-				if(!(Pattern.matches("[a-z]|[A-Z]|[0-9]", next))) {					
+				if(temp.contentEquals("if") || temp.contentEquals("then") || temp.contentEquals("elseif") || temp.contentEquals("while")
+						|| temp.contentEquals("do") || temp.contentEquals("endwhile") || temp.contentEquals("skip")) {
+					tokenType = "KEYWORD";
+				}
+				else if(!(Pattern.matches("[a-z]|[A-Z]|[0-9]", next))) {					
 					tokenType = "IDENTIFIER";
 				}
 			}
@@ -156,7 +165,6 @@ public class MainApplication {
 				temp += next;
 			}
 		}
-		tokens += "\n";
 		return(tokens);
 	}
 }
